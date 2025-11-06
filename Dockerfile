@@ -3,13 +3,12 @@ FROM ubuntu:24.04
 LABEL maintainer "tuan t. pham" <tuan@vt.edu>
 
 # Set environment variables for package installation
-ENV PKGS="python3 python3-pip" \
+ENV PKGS="python3 python3-pip python3.12-venv" \
     DEBIAN_FRONTEND=noninteractive
 
 # Update and upgrade packages, install required dependencies, and pip packages
 RUN apt-get -yq update && apt-get dist-upgrade -yq \
-    && apt-get -yq install --no-install-recommends ${PKGS} \
-    && pip3 install flask pyserial pygmc
+    && apt-get -yq install --no-install-recommends ${PKGS}
 
 # Remove unnecessary files to reduce image size
 RUN apt-get autoremove -yq \
@@ -17,12 +16,14 @@ RUN apt-get autoremove -yq \
     && rm -fr /tmp/* /var/lib/apt/lists/*
 
 COPY gmc-service.py /usr/local/bin
-
-# Change the working directory to /opt/temper/bin
-WORKDIR /usr/local/bin
+COPY requirements.txt /tmp/
+USER ubuntu
+RUN python3 -m venv /home/ubuntu/venv
+RUN /home/ubuntu/venv/bin/python3 -m pip install -r /tmp/requirements.txt
+WORKDIR /home/ubuntu
 
 # Expose port 2380 for the application
 EXPOSE 2380
 
 # Run the temper-service.py script as the entrypoint
-ENTRYPOINT ["python3", "gmc-service.py"]
+ENTRYPOINT ["/home/ubuntu/venv/bin/python3", "/usr/local/bin/gmc-service.py"]
