@@ -1,0 +1,23 @@
+---
+version: '3'
+
+services:
+  gmc:
+    container_name: gmc
+    hostname: gmc
+    image: neofob/gmc:latest
+    volumes:
+      - /dev:/dev
+    restart: always
+    ports:
+      - 2380:2380
+    privileged: true
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1M"
+        max-file: "1"
