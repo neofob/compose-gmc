@@ -21,7 +21,7 @@ COPY gmc-service.py /usr/local/bin
 # Change the working directory to /opt/temper/bin
 WORKDIR /usr/local/bin
 
-# Expose port 2610 for the application
+# Expose port 2380 for the application
 EXPOSE 2380
 
 # Run the temper-service.py script as the entrypoint
