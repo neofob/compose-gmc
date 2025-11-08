@@ -15,18 +15,18 @@ _author_: *tuan t. pham*
 make
 ```
 
-## Run as a docker service
+## Run as a Docker service
 ```bash
 docker-compose up -d
 ```
 
-## Run python script
+## Run Python script
 ```bash
 pip install -r requirements.txt
 ./gmc-service.py
 ```
 
-## Example usage
+## Usage example
 ```bash
 # On one terminal
 docker-compose up -d
