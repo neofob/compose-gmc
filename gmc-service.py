@@ -30,7 +30,7 @@ def config():
 @app.route('/metrics')
 def metrics():
     global _version_
-    #_version_ = str(gmc.get_version())
+    _version_ = str(gmc.get_version())
     data = [{"cpm": gmc.get_cpm(),
              "version": _version_
              }]
