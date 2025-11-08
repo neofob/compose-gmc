@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+# Providing metrics from GQ GMC Geiger counter
+# The computer must connect to the counter via USB cable
+# __author__: tuan t. pham
+# tuan at vt dot edu
 
 import pygmc
 import argparse
@@ -13,7 +17,7 @@ args = parser.parse_args()
 
 app = Flask("GMC")
 gmc = pygmc.connect()
-#_version_ = str(gmc.get_version())
+_version_ = str(gmc.get_version())
 
 print(f"Available endpoints:")
 print(f"/config = list GMC config")
@@ -25,7 +29,8 @@ def config():
 
 @app.route('/metrics')
 def metrics():
-    _version_ = str(gmc.get_version())
+    global _version_
+    #_version_ = str(gmc.get_version())
     data = [{"cpm": gmc.get_cpm(),
              "version": _version_
              }]
