@@ -1,10 +1,11 @@
 # Use an official Ubuntu runtime as the base image
-FROM ubuntu:24.04
+FROM python:3.14.0-slim-trixie
 LABEL maintainer "tuan t. pham" <tuan@vt.edu>
 
 # Set environment variables for package installation
-ENV PKGS="python3 python3-pip python3.12-venv" \
-    DEBIAN_FRONTEND=noninteractive
+ENV PKGS="pypy3-venv" DEBIAN_FRONTEND=noninteractive
+ENV GMC_USER=gmc
+RUN adduser ${GMC_USER}
 
 # Update and upgrade packages, install required dependencies, and pip packages
 RUN apt-get -yq update && apt-get dist-upgrade -yq \
@@ -17,13 +18,13 @@ RUN apt-get autoremove -yq \
 
 COPY gmc-service.py /usr/local/bin
 COPY requirements.txt /tmp/
-USER ubuntu
-RUN python3 -m venv /home/ubuntu/venv
-RUN /home/ubuntu/venv/bin/python3 -m pip install -r /tmp/requirements.txt
-WORKDIR /home/ubuntu
+USER gmc
+RUN python3 -m venv /home/gmc/venv
+RUN /home/gmc/venv/bin/python3 -m pip install -r /tmp/requirements.txt
+WORKDIR /home/gmc
 
 # Expose port 2380 for the application
 EXPOSE 2380
 
 # Run the temper-service.py script as the entrypoint
-ENTRYPOINT ["/home/ubuntu/venv/bin/python3", "/usr/local/bin/gmc-service.py"]
+ENTRYPOINT ["/home/gmc/venv/bin/python3", "/usr/local/bin/gmc-service.py"]
